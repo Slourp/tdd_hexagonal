@@ -21,3 +21,19 @@
 4. 🌱 Continuous Improvement (Amélioration Continue) : Les artisans cherchent constamment à s'améliorer en adoptant une approche itérative et en apprenant de leurs expériences, de leurs pairs et de la communauté.
 
 Ces points capturent les principes fondamentaux du craftsmanship en développement logiciel, mettant en évidence l'importance de l'apprentissage continu, de la qualité, de la collaboration, de la simplicité et des axiomes du feedback rapide, de l'assomption de la variabilité, de l'acceptation de l'échec et de l'amélioration continue.
+
+
+## Les qualités d'un logiciel :
+### Stabilité
+
+- **Change Failure Rate** (Taux d'échec lors des changements) : Mesure la capacité d'un logiciel à gérer les changements sans introduire de nouveaux problèmes ou de bugs. Un faible taux d'échec lors des changements indique que le logiciel est robuste et résistant aux modifications.
+- **Recovery Failure Time** (Temps de récupération en cas d'échec) : Mesure la capacité d'un logiciel à se rétablir rapidement après un incident ou un échec. Un temps de récupération court minimise les interruptions de service et permet de restaurer les fonctionnalités normales du logiciel dans les plus brefs délais.
+
+### Throughput (Fréquence de déploiement)
+
+- **Lead time** (Temps nécessaire pour la mise en production d'une idée) : Mesure le temps écoulé depuis la conception d'une idée jusqu'à sa mise en production. Un lead time court permet une mise en production rapide des nouvelles fonctionnalités et idées.
+- **Deployment Frequency** (Fréquence des changements publiés en production) : Mesure la fréquence à laquelle les changements et les nouvelles fonctionnalités sont déployés en production. Une fréquence élevée indique une capacité à itérer rapidement et à répondre aux besoins changeants du logiciel.
+
+Ces deux aspects, la stabilité et le throughput, sont essentiels pour la création de logiciels performants et fiables. La stabilité garantit la résilience et la fiabilité du logiciel face aux changements, tandis que le throughput favorise une mise en production rapide et itérative des nouvelles fonctionnalités.
+
+Ces qualités combinées contribuent à la satisfaction des utilisateurs, à la rentabilité des entreprises et à l'amélioration continue des applications logicielles.
