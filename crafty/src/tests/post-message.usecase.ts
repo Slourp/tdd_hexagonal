@@ -31,6 +31,7 @@ export class PostMessageUseCase {
         private readonly dateProvider: DateProvider
     ) { }
     handle(postMessageCommand: postMessageCommand) {
+        console.log("test lenght", postMessageCommand.text)
         if (postMessageCommand.text.length >= 280)
             throw new MessageTooLongError()
 
