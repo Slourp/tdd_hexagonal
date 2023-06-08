@@ -4,6 +4,7 @@ import { Command } from "commander";
 import { DateProvider, postMessageCommand } from "./tests/post-message.usecase";
 import { PostMessageUseCase } from "./tests/post-message.usecase";
 import { InMemoryMessageRepository } from "./tests/message.inmemory.repository";
+import { FilsystemMessageRepository } from "./tests/message.fs.repository";
 
 
 const program = new Command();
@@ -12,7 +13,7 @@ class RealDateProvider implements DateProvider {
         return new Date()
     }
 }
-const messageRepository = new InMemoryMessageRepository()
+const messageRepository = new FilsystemMessageRepository()
 const realDateProvider = new RealDateProvider()
 const postMessageUseCase = new PostMessageUseCase(messageRepository, realDateProvider)
 program
@@ -20,14 +21,14 @@ program
     .description('A command-line tool for posting messages')
     .command('post <user> <message>')
     .description('Post a message')
-    .action((user, message) => {
+    .action(async (user, message) => {
         const postMessageCommand: postMessageCommand = {
             id: "text-id",
             text: message,
             author: user
         }
         try {
-            postMessageUseCase.handle(postMessageCommand)
+            await postMessageUseCase.handle(postMessageCommand)
             console.log("[✅] Message posted")
             console.table([messageRepository.message])
 

@@ -30,8 +30,7 @@ export class PostMessageUseCase {
         private readonly messageRepository: MessageRepository,
         private readonly dateProvider: DateProvider
     ) { }
-    handle(postMessageCommand: postMessageCommand) {
-        console.log("test lenght", postMessageCommand.text)
+    async handle(postMessageCommand: postMessageCommand) {
         if (postMessageCommand.text.length >= 280)
             throw new MessageTooLongError()
 
@@ -42,7 +41,7 @@ export class PostMessageUseCase {
             .trim().length == 0)
             throw new WhiteSpacesMessageError()
 
-        this.messageRepository.save({
+        await this.messageRepository.save({
             id: postMessageCommand.id,
             text: postMessageCommand.text,
             author: postMessageCommand.author,
