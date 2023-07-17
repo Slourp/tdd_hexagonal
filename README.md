@@ -22,8 +22,8 @@
 
 Ces points capturent les principes fondamentaux du craftsmanship en développement logiciel, mettant en évidence l'importance de l'apprentissage continu, de la qualité, de la collaboration, de la simplicité et des axiomes du feedback rapide, de l'assomption de la variabilité, de l'acceptation de l'échec et de l'amélioration continue.
 
-
 ## Les qualités d'un logiciel :
+
 ### Stabilité
 
 - **Change Failure Rate** (Taux d'échec lors des changements) : Mesure la capacité d'un logiciel à gérer les changements sans introduire de nouveaux problèmes ou de bugs. Un faible taux d'échec lors des changements indique que le logiciel est robuste et résistant aux modifications.
@@ -51,6 +51,7 @@ Ces qualités combinées contribuent à la satisfaction des utilisateurs, à la 
 - **Timely (Opportuns | Toughrough)** : Les tests unitaires doivent être écrits en même temps (ou même avant) le code qu'ils testent. Ils doivent être maintenus à jour au fur et à mesure que le code évolue. Cela garantit une couverture adéquate et permet de détecter rapidement les régressions.
 
 Ces principes, y compris la lisibilité et la concision, aident à établir des bonnes pratiques pour la création et la maintenance des tests unitaires. En les suivant, vous pouvez créer des tests plus efficaces, fiables et évolutifs pour assurer la qualité du code.
+des
 
 ## Pattern Object Mother (Test Data Builder)
 
@@ -69,11 +70,11 @@ class User {
 
 class UserMother {
   static createJohnDoe() {
-    return new User('John Doe', 'john@example.com');
+    return new User("John Doe", "john@example.com");
   }
 
   static createJaneSmith() {
-    return new User('Jane Smith', 'jane@example.com');
+    return new User("Jane Smith", "jane@example.com");
   }
 }
 
@@ -99,8 +100,8 @@ Voici un exemple d'implémentation du pattern Builder pour les tests en JavaScri
 ```javascript
 class UserBuilder {
   constructor() {
-    this.name = '';
-    this.email = '';
+    this.name = "";
+    this.email = "";
     this.age = 0;
   }
 
@@ -130,8 +131,8 @@ class UserBuilder {
 
 // Usage :
 const user = new UserBuilder()
-  .withName('John Doe')
-  .withEmail('john@example.com')
+  .withName("John Doe")
+  .withEmail("john@example.com")
   .withAge(25)
   .build();
 ```
