@@ -13,6 +13,8 @@ class RealDateProvider implements DateProvider {
   }
 }
 const messageRepository = new FilsystemMessageRepository();
+// const messageRepository = new InMemoryMessageRepository();
+
 const realDateProvider = new RealDateProvider();
 const postMessageUseCase = new PostMessageUseCase(
   messageRepository,

@@ -11,7 +11,7 @@ export type Message = {
 };
 
 export interface MessageRepository {
-  save(message: Message): void;
+  save(message: Message): Promise<void>;
 }
 
 export interface DateProvider {
@@ -22,13 +22,13 @@ export class MessageTooLongError extends Error {}
 
 export class EmptyMessageError extends Error {}
 export class WhiteSpacesMessageError extends Error {}
+
 export class PostMessageUseCase {
   constructor(
     private readonly messageRepository: MessageRepository,
     private readonly dateProvider: DateProvider
   ) {}
   async handle(postMessageCommand: postMessageCommand) {
-    console.log("COMPTAGE SA MERE : ", postMessageCommand.text.length);
     if (postMessageCommand.text.length >= 280) throw new MessageTooLongError();
 
     if (postMessageCommand.text.length == 0) throw new EmptyMessageError();
