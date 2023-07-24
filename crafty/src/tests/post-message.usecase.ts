@@ -1,18 +1,5 @@
-export type postMessageCommand = {
-  id: string;
-  text: string;
-  author: string;
-};
-export type Message = {
-  id: string;
-  text: string;
-  author: string;
-  publishedAt: Date;
-};
-
-export interface MessageRepository {
-  save(message: Message): Promise<void>;
-}
+import { InMemoryMessageRepository } from "./message.inmemory.repository";
+import postMessageCommand from "./postMessageCommand";
 
 export interface DateProvider {
   getNow(): Date;
@@ -25,7 +12,7 @@ export class WhiteSpacesMessageError extends Error {}
 
 export class PostMessageUseCase {
   constructor(
-    private readonly messageRepository: MessageRepository,
+    private readonly messageRepository: InMemoryMessageRepository,
     private readonly dateProvider: DateProvider
   ) {}
   async handle(postMessageCommand: postMessageCommand) {
