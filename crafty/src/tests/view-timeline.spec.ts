@@ -118,40 +118,41 @@ describe("Feature: Viewing a personnal timeline", () => {
 
         expect(text).toEqual("less than a minute ago");
       });
-    });
+      it("should return  '1 minute ago' when the publication date is exactly 1 minute ago", () => {
+        const now = new Date("2023-02-16T10:57:00.000Z");
+        const publishedAt = new Date("2023-02-16T10:56:30.000Z");
 
-    it("should return  '1 minute ago' when the publication date is exactly 1 minute ago", () => {
-      const now = new Date("2023-02-16T10:57:00.000Z");
-      const publishedAt = new Date("2023-02-16T10:56:30.000Z");
+        const text = publicationTime(now, publishedAt);
 
-      const text = publicationTime(now, publishedAt);
+        expect(text).toEqual("less than a minute ago");
+      });
 
-      expect(text).toEqual("less than a minute ago");
-    });
+      it("should return  '1 minutes ago' when the publication date is exactly under 2 minutes ago", () => {
+        const now = new Date("2023-02-16T10:57:00.000Z");
+        const publishedAt = new Date("2023-02-16T10:55:01.000Z");
 
-    it("should return  '1 minutes ago' when the publication date is exactly under 2 minutes ago", () => {
-      const now = new Date("2023-02-16T10:57:00.000Z");
-      const publishedAt = new Date("2023-02-16T10:55:01.000Z");
+        const text = publicationTime(now, publishedAt);
 
-      const text = publicationTime(now, publishedAt);
+        expect(text).toEqual("1 minute ago");
+      });
 
-      expect(text).toEqual("1 minute ago");
-    });
-    it("should return  '2 minutes ago' when the publication date is between 2 minutes ago and  2 minutes 59 sec ago", () => {
-      const now = new Date("2023-02-16T10:57:00.000Z");
-      const publishedAt = new Date("2023-02-16T10:55:00.000Z");
+      it("should return  '2 minutes ago' when the publication date is between 2 minutes ago and  2 minutes 59 sec ago", () => {
+        const now = new Date("2023-02-16T10:57:00.000Z");
+        const publishedAt = new Date("2023-02-16T10:55:00.000Z");
 
-      const text = publicationTime(now, publishedAt);
+        const text = publicationTime(now, publishedAt);
 
-      expect(text).toEqual("2 minutes ago");
-    });
-    it("should return  'X minutes ago' when the publication date is between X minutes ago and  X minutes 59 sec ago", () => {
-      const now = new Date("2023-02-16T10:57:00.000Z");
-      const publishedAt = new Date("2023-02-16T10:55:00.000Z");
+        expect(text).toEqual("2 minutes ago");
+      });
 
-      const text = publicationTime(now, publishedAt);
+      it("should return  'X minutes ago' when the publication date is between X minutes ago and  X minutes 59 sec ago", () => {
+        const now = new Date("2023-02-16T10:57:00.000Z");
+        const publishedAt = new Date("2023-02-16T10:55:00.000Z");
 
-      expect(text).toEqual("5 minutes ago");
+        const text = publicationTime(now, publishedAt);
+
+        expect(text).toEqual("5 minutes ago");
+      });
     });
   });
 });
