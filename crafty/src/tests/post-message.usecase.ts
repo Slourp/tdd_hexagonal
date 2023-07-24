@@ -1,9 +1,5 @@
-import { InMemoryMessageRepository } from "./message.inmemory.repository";
+import IMessageRepository from "./IMessageRepository";
 import postMessageCommand from "./postMessageCommand";
-
-export interface DateProvider {
-  getNow(): Date;
-}
 
 export class MessageTooLongError extends Error {}
 
@@ -12,7 +8,7 @@ export class WhiteSpacesMessageError extends Error {}
 
 export class PostMessageUseCase {
   constructor(
-    private readonly messageRepository: InMemoryMessageRepository,
+    private readonly messageRepository: IMessageRepository,
     private readonly dateProvider: DateProvider
   ) {}
   async handle(postMessageCommand: postMessageCommand) {

@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
 import { Command } from "commander";
-import { DateProvider, postMessageCommand } from "./tests/post-message.usecase";
+import { DateProvider } from "./tests/post-message.usecase";
 import { PostMessageUseCase } from "./tests/post-message.usecase";
-import { InMemoryMessageRepository } from "./tests/message.inmemory.repository";
 import { FilsystemMessageRepository } from "./tests/message.fs.repository";
+import postMessageCommand from "./tests/postMessageCommand";
 
 const program = new Command();
 class RealDateProvider implements DateProvider {
