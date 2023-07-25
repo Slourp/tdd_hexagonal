@@ -32,6 +32,11 @@ export class InMemoryMessageRepository implements IMessageRepository {
     return Promise.resolve(messagesByUser);
   }
 
+  getAllMessages(): Promise<Message[]> {
+    const allMessages: Message[] = [...this.messages.values()];
+    return Promise.resolve(allMessages);
+  }
+
   private _save(message: Message) {
     this.messages.set(message.id, message);
   }

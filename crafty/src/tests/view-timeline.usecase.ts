@@ -1,3 +1,4 @@
+import Message from "./Message";
 import Timeline from "./Timeline";
 import { InMemoryMessageRepository } from "./message.inmemory.repository";
 import StubeDateProvider from "./stub-date-provider";
@@ -12,37 +13,18 @@ class ViewTimeLineViewCase {
     usersMessages.sort(
       (msgA, msgB) => msgB.publishedAt.getTime() - msgA.publishedAt.getTime()
     );
+    const timeLine: Timeline[] = usersMessages.map((message: Message) => ({
+      author: message.author,
+      text: message.text,
+      publicationTime: this.publicationTime(message.publishedAt),
+    }));
 
-    const timeLine: Timeline[] = [
-      {
-        author: usersMessages[0].author,
-        text: usersMessages[0].text,
-        publicationTime: this.publicationTime(
-          this.dateProvider.now,
-          usersMessages[0].publishedAt
-        ),
-      },
-      {
-        author: usersMessages[1].author,
-        text: usersMessages[1].text,
-        publicationTime: this.publicationTime(
-          this.dateProvider.now,
-          usersMessages[1].publishedAt
-        ),
-      },
-      {
-        author: usersMessages[2].author,
-        text: usersMessages[2].text,
-        publicationTime: this.publicationTime(
-          this.dateProvider.now,
-          usersMessages[2].publishedAt
-        ),
-      },
-    ];
     return timeLine;
   }
 
-  private publicationTime(now: Date, publishedAt: Date) {
+  private publicationTime(publishedAt: Date) {
+    const now = this.dateProvider.getNow();
+
     const timeDiffInSeconds = Math.floor(
       (now.getTime() - publishedAt.getTime()) / 1000
     );

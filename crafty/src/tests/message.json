@@ -1,1 +1,14 @@
-{"id":"text-id","text":"hssssssssssssssssssssssssssssssssssssse","author":"David","publishedAt":"2023-07-18T14:28:21.264Z"}
+[
+  {
+    "id": "ca196faa-78c8-445e-a192-148b916fdf87",
+    "text": "Hello world, This is my first message",
+    "publishedAt": "2023-07-25T10:44:35.290Z",
+    "author": "Alice"
+  },
+  {
+    "id": "d4146b1b-68e6-4b93-b64f-be227764305c",
+    "text": "How are you ? ",
+    "author": "Alice",
+    "publishedAt": "2023-07-25T10:45:08.486Z"
+  }
+]

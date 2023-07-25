@@ -1,12 +1,14 @@
 #!/usr/bin/env node
+import { v4 as uuidv4 } from "uuid";
 
 import { Command } from "commander";
-import { DateProvider } from "./tests/post-message.usecase";
 import { PostMessageUseCase } from "./tests/post-message.usecase";
 import { FilsystemMessageRepository } from "./tests/message.fs.repository";
 import postMessageCommand from "./tests/postMessageCommand";
+import DateProvider from "./tests/IDateProvider";
 
 const program = new Command();
+
 class RealDateProvider implements DateProvider {
   getNow(): Date {
     return new Date();
@@ -30,7 +32,7 @@ program
       .argument("<message>", "the message to post")
       .action(async (user, message) => {
         const postMessageCommand: postMessageCommand = {
-          id: "text-id",
+          id: uuidv4(),
           text: message,
           author: user,
         };

@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "build": "tsc --noEmit src/server.ts && esbuild src/server.ts --outdir=dist --bundle --platform=node --format=cjs",
+    "build": "tsc --noEmit --downlevelIteration src/server.ts && esbuild src/server.ts --outdir=dist --bundle --platform=node --format=cjs",
     "start:dev": "ts-node-dev --respawn --transpile-only src/server.ts",
     "post-message": "npm run build && node dist/server.js post"
   },
@@ -9,7 +9,8 @@
     "commander": "^10.0.1",
     "jest": "^29.5.0",
     "ts-jest": "^29.1.0",
-    "ts-node-dev": "^2.0.0"
+    "ts-node-dev": "^2.0.0",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@types/jest": "^29.5.2",

@@ -8,4 +8,6 @@ export default interface IMessageRepository {
   givenExistingMessages(messages: Message[]): void;
 
   getUsersMessages(user: string): Promise<Message[]>;
+
+  getAllMessages(): Promise<Message[]>;
 }
