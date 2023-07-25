@@ -1,14 +1,1 @@
-[
-  {
-    "id": "ca196faa-78c8-445e-a192-148b916fdf87",
-    "text": "Hello world, This is my first message",
-    "publishedAt": "2023-07-25T10:44:35.290Z",
-    "author": "Alice"
-  },
-  {
-    "id": "d4146b1b-68e6-4b93-b64f-be227764305c",
-    "text": "How are you ? ",
-    "author": "Alice",
-    "publishedAt": "2023-07-25T10:45:08.486Z"
-  }
-]
+[{"id":"ca196faa-78c8-445e-a192-148b916fdf87","text":"Hello world, This is my first message","publishedAt":"2023-07-25T10:44:35.290Z","author":"Alice"},{"id":"d4146b1b-68e6-4b93-b64f-be227764305c","text":"How are you ? ","publishedAt":"2023-07-25T10:45:08.486Z","author":"Alice"},{"id":"1a3c5a98-66c2-4aa4-b328-a6f62d027f5c","text":"Hello world, This is my first message","author":"Alice","publishedAt":"2023-07-25T12:00:00.600Z"}]

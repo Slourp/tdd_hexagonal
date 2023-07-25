@@ -6,6 +6,8 @@ import { PostMessageUseCase } from "./tests/post-message.usecase";
 import { FilsystemMessageRepository } from "./tests/message.fs.repository";
 import postMessageCommand from "./tests/postMessageCommand";
 import DateProvider from "./tests/IDateProvider";
+import ViewTimeLineViewCase from "./tests/view-timeline.usecase";
+import { exit } from "process";
 
 const program = new Command();
 
@@ -19,6 +21,11 @@ const messageRepository = new FilsystemMessageRepository();
 
 const realDateProvider = new RealDateProvider();
 const postMessageUseCase = new PostMessageUseCase(
+  messageRepository,
+  realDateProvider
+);
+
+const viewTimeLineViewCase = new ViewTimeLineViewCase(
   messageRepository,
   realDateProvider
 );
@@ -40,8 +47,24 @@ program
           await postMessageUseCase.handle(postMessageCommand);
           console.log("[✅] Message posted");
           console.table([messageRepository.message]);
+          exit(0);
         } catch (error) {
           console.error("[❌]", error);
+          exit(1);
+        }
+      })
+  )
+  .addCommand(
+    new Command("view")
+      .argument("<user>", "the user whose timeline is to be viewed")
+      .action(async (user) => {
+        try {
+          const timeLine = await viewTimeLineViewCase.handle({ user });
+          console.table(timeLine);
+          exit(0);
+        } catch (error) {
+          console.error("[❌]", error);
+          exit(1);
         }
       })
   );

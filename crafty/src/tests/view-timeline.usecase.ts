@@ -1,12 +1,12 @@
+import DateProvider from "./IDateProvider";
+import IMessageRepository from "./IMessageRepository";
 import Message from "./Message";
 import Timeline from "./Timeline";
-import { InMemoryMessageRepository } from "./message.inmemory.repository";
-import StubeDateProvider from "./stub-date-provider";
 
 class ViewTimeLineViewCase {
   constructor(
-    private readonly messageRepository: InMemoryMessageRepository,
-    private readonly dateProvider: StubeDateProvider
+    private readonly messageRepository: IMessageRepository,
+    private readonly dateProvider: DateProvider
   ) {}
   async handle({ user }: { user: string }): Promise<Timeline[]> {
     const usersMessages = await this.messageRepository.getUsersMessages(user);
