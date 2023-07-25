@@ -1,62 +1,9 @@
-import Message from "./Message";
-import Timeline from "./Timeline";
-import { InMemoryMessageRepository } from "./message.inmemory.repository";
-import StubeDateProvider from "./stub-date-provider";
-import ViewTimeLineViewCase from "./view-timeline.usecase";
+import { MessagingFixture, createMessagingFixture } from "./messaging-fixture";
 
 describe("Feature: Viewing a personnal timeline", () => {
-  let fixture: Fixture;
+  let fixture: MessagingFixture;
 
-  beforeEach(() => (fixture = createFixture()));
-
-  const publicationTime = (now: Date, publishedAt: Date) => {
-    const timeDiffInSeconds = Math.floor(
-      (now.getTime() - publishedAt.getTime()) / 1000
-    );
-
-    const lessThanMinute = (time: number) => time < 60;
-    const minutesAgo = (time: number) => time < 3600;
-    const hoursAgo = (time: number) => time < 86400;
-    const daysAgo = (time: number) => time < 2592000;
-    const monthsAgo = (time: number) => time < 5184000;
-    const yearsAgo = (time: number) => time >= 5184000;
-
-    const getFormattedTime = (value: number, unit: string) =>
-      `${value} ${unit}${value === 1 ? "" : "s"} ago`;
-
-    const lessThanMinuteOutput = (time: number) =>
-      getFormattedTime(time, "minute");
-    const minutesAgoOutput = (time: number) =>
-      getFormattedTime(Math.floor(time / 60), "minute");
-    const hoursAgoOutput = (time: number) =>
-      getFormattedTime(Math.floor(time / 3600), "hour");
-    const daysAgoOutput = (time: number) =>
-      getFormattedTime(Math.floor(time / 86400), "day");
-    const monthsAgoOutput = (time: number) =>
-      getFormattedTime(Math.floor(time / 2592000), "month");
-    const yearsAgoOutput = (time: number) =>
-      getFormattedTime(Math.floor(time / 31104000), "year");
-
-    if (lessThanMinute(timeDiffInSeconds)) {
-      return lessThanMinuteOutput(timeDiffInSeconds);
-    }
-    if (minutesAgo(timeDiffInSeconds)) {
-      return minutesAgoOutput(timeDiffInSeconds);
-    }
-    if (hoursAgo(timeDiffInSeconds)) {
-      return hoursAgoOutput(timeDiffInSeconds);
-    }
-    if (daysAgo(timeDiffInSeconds)) {
-      return daysAgoOutput(timeDiffInSeconds);
-    }
-    if (monthsAgo(timeDiffInSeconds)) {
-      return monthsAgoOutput(timeDiffInSeconds);
-    }
-
-    return yearsAgo(timeDiffInSeconds)
-      ? yearsAgoOutput(timeDiffInSeconds)
-      : "Invalid time";
-  };
+  beforeEach(() => (fixture = createMessagingFixture()));
 
   describe("Rule: Message are shown in reverse chronologic", () => {
     test("Alice can view 3 messages she has published on her timeline", async () => {
@@ -89,7 +36,7 @@ describe("Feature: Viewing a personnal timeline", () => {
 
       fixture.givenNowIs(new Date("2023-02-07T16:31:00.000Z"));
 
-      fixture.whenUserSeesAlicesTimeLine("Aline");
+      fixture.whenUserSeesUsersTimeLine("Aline");
 
       fixture.thenUserShouldSees([
         {
@@ -111,32 +58,3 @@ describe("Feature: Viewing a personnal timeline", () => {
     });
   });
 });
-
-const createFixture = () => {
-  const messageRepository = new InMemoryMessageRepository();
-  const dateProvider = new StubeDateProvider();
-  const viewTimeLineViewCase = new ViewTimeLineViewCase(
-    messageRepository,
-    dateProvider
-  );
-  let timeline: Timeline[];
-
-  return {
-    async givenTheFollowingMessagesExist(messages: Message[]) {
-      messageRepository.givenExistingMessages(messages);
-    },
-
-    givenNowIs(now: Date) {
-      dateProvider.now = now;
-    },
-
-    async whenUserSeesAlicesTimeLine(user: string) {
-      await viewTimeLineViewCase.handle({ user });
-    },
-    thenUserShouldSees(expectedTimeline: Timeline[]) {
-      expect(timeline).toEqual(expectedTimeline);
-    },
-  };
-};
-
-type Fixture = ReturnType<typeof createFixture>;

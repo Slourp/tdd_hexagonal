@@ -1,21 +1,17 @@
-import Message from "./Message";
-import { InMemoryMessageRepository } from "./message.inmemory.repository";
+import { MessagingFixture, createMessagingFixture } from "./messaging-fixture";
 import {
   MessageTooLongError,
-  PostMessageUseCase,
   WhiteSpacesMessageError,
 } from "./post-message.usecase";
-import postMessageCommand from "./postMessageCommand";
-import StubeDateProvider from "./stub-date-provider";
 
 describe("Feature: posting a message", () => {
-  let fixtures: Fixtures;
+  let fixtures: MessagingFixture;
   beforeEach(() => {
-    fixtures = createFixture();
+    fixtures = createMessagingFixture();
   });
   describe("Rule: A message can contain a maximum of 280 characteres", () => {
     test("Alice can post a message on her timelune", async () => {
-      fixtures.givenNowis(new Date("2023-01-19T19:00:00.000Z"));
+      fixtures.givenNowIs(new Date("2023-01-19T19:00:00.000Z"));
 
       await fixtures.whenUserPostsAmessage({
         id: "message-id",
@@ -23,7 +19,7 @@ describe("Feature: posting a message", () => {
         text: "Hellow world",
       });
 
-      fixtures.thenPostMessageshouldBe({
+      fixtures.thenMessageShouldBe({
         id: "message-id",
         text: "Hellow world",
         author: "Alice",
@@ -35,7 +31,7 @@ describe("Feature: posting a message", () => {
       const textWithMoreThan280Characteres: string =
         "In ex Lorem consequat veniam labore mollit quis aliqua quis eu minim. Commodo adipisicing dolore tempor culpa consectetur ea magna ad sit exercitation culpa adipisicing. Labore non enim laboris dolore commodo officia sint dolor enim. Consectetur eu in ullamco non excepteur enim te.";
 
-      fixtures.givenNowis(new Date("2023-01-19T19:00:00.000Z"));
+      fixtures.givenNowIs(new Date("2023-01-19T19:00:00.000Z"));
 
       await fixtures.whenUserPostsAmessage({
         id: "message-id",
@@ -48,7 +44,7 @@ describe("Feature: posting a message", () => {
     test("Alice can not post a message with only white spaces", async () => {
       const textWithWhiteSpaces: string = "      ";
 
-      fixtures.givenNowis(new Date("2023-01-19T19:00:00.000Z"));
+      fixtures.givenNowIs(new Date("2023-01-19T19:00:00.000Z"));
 
       await fixtures.whenUserPostsAmessage({
         id: "message-id",
@@ -60,39 +56,3 @@ describe("Feature: posting a message", () => {
     });
   });
 });
-
-export const createFixture = () => {
-  const dateProvider = new StubeDateProvider();
-
-  const messageRepository: InMemoryMessageRepository =
-    new InMemoryMessageRepository();
-
-  const postMessageUseCase: PostMessageUseCase = new PostMessageUseCase(
-    messageRepository,
-    dateProvider
-  );
-
-  let thrownError: Error;
-  return {
-    givenNowis(now: Date) {
-      dateProvider.now = now;
-    },
-    async whenUserPostsAmessage(postMessageCommand: postMessageCommand) {
-      try {
-        await postMessageUseCase.handle(postMessageCommand);
-      } catch (error: any) {
-        thrownError = error;
-      }
-    },
-    thenPostMessageshouldBe(expectedMessage: Message) {
-      expect(expectedMessage).toEqual(
-        messageRepository.getMessageById(expectedMessage.id)
-      );
-    },
-    thenErrorShouldBe(expectErrorClass: new () => Error) {
-      expect(thrownError).toBeInstanceOf(expectErrorClass);
-    },
-  };
-};
-
-type Fixtures = ReturnType<typeof createFixture>;
