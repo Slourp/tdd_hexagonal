@@ -1,3 +1,4 @@
+import { messageBuilder } from "./message.builder";
 import { MessagingFixture, createMessagingFixture } from "./messaging-fixture";
 import {
   MessageTooLongError,
@@ -12,19 +13,18 @@ describe("Feature: posting a message", () => {
   describe("Rule: A message can contain a maximum of 280 characteres", () => {
     test("Alice can post a message on her timelune", async () => {
       fixtures.givenNowIs(new Date("2023-01-19T19:00:00.000Z"));
+      const aliceMessageBuilder = messageBuilder()
+        .withId("message-id")
+        .withAuthor("Alice")
+        .withText("Hello world");
 
-      await fixtures.whenUserPostsAmessage({
-        id: "message-id",
-        author: "Alice",
-        text: "Hellow world",
-      });
+      await fixtures.whenUserPostsAmessage(messageBuilder().build());
 
-      fixtures.thenMessageShouldBe({
-        id: "message-id",
-        text: "Hellow world",
-        author: "Alice",
-        publishedAt: new Date("2023-01-19T19:00:00.000Z"),
-      });
+      fixtures.thenMessageShouldBe(
+        aliceMessageBuilder
+          .withPublishedAt(new Date("2023-01-19T19:00:00.000Z"))
+          .build()
+      );
     });
 
     test("Alice can not post a message with more than 280 characters", async () => {
