@@ -4,10 +4,28 @@ import Message from "./Message";
 import Timeline from "./Timeline";
 
 class ViewTimeLineViewCase {
+  private readonly TIME_UNITS = {
+    SECOND: "second",
+    MINUTE: "minute",
+    HOUR: "hour",
+    DAY: "day",
+    MONTH: "month",
+    YEAR: "year",
+  };
+
+  private readonly TIME_IN_SECONDS = {
+    MINUTE: 60,
+    HOUR: 3600,
+    DAY: 86400,
+    MONTH: 2592000,
+    YEAR: 31104000,
+  };
+
   constructor(
     private readonly messageRepository: IMessageRepository,
     private readonly dateProvider: DateProvider
   ) {}
+
   async handle({ user }: { user: string }): Promise<Timeline[]> {
     const usersMessages = await this.messageRepository.getUsersMessages(user);
     usersMessages.sort(
@@ -24,53 +42,54 @@ class ViewTimeLineViewCase {
 
   private publicationTime(publishedAt: Date) {
     const now = this.dateProvider.getNow();
-
     const timeDiffInSeconds = Math.floor(
       (now.getTime() - publishedAt.getTime()) / 1000
     );
 
-    const lessThanMinute = (time: number) => time < 60;
-    const minutesAgo = (time: number) => time < 3600;
-    const hoursAgo = (time: number) => time < 86400;
-    const daysAgo = (time: number) => time < 2592000;
-    const monthsAgo = (time: number) => time < 5184000;
-    const yearsAgo = (time: number) => time >= 5184000;
-
     const getFormattedTime = (value: number, unit: string) =>
       `${value} ${unit}${value === 1 ? "" : "s"} ago`;
 
-    const lessThanMinuteOutput = (time: number) =>
-      getFormattedTime(time, "minute");
-    const minutesAgoOutput = (time: number) =>
-      getFormattedTime(Math.floor(time / 60), "minute");
-    const hoursAgoOutput = (time: number) =>
-      getFormattedTime(Math.floor(time / 3600), "hour");
-    const daysAgoOutput = (time: number) =>
-      getFormattedTime(Math.floor(time / 86400), "day");
-    const monthsAgoOutput = (time: number) =>
-      getFormattedTime(Math.floor(time / 2592000), "month");
-    const yearsAgoOutput = (time: number) =>
-      getFormattedTime(Math.floor(time / 31104000), "year");
+    const { SECOND, MINUTE, HOUR, DAY, MONTH, YEAR } = this.TIME_UNITS;
 
-    if (lessThanMinute(timeDiffInSeconds)) {
-      return lessThanMinuteOutput(timeDiffInSeconds);
-    }
-    if (minutesAgo(timeDiffInSeconds)) {
-      return minutesAgoOutput(timeDiffInSeconds);
-    }
-    if (hoursAgo(timeDiffInSeconds)) {
-      return hoursAgoOutput(timeDiffInSeconds);
-    }
-    if (daysAgo(timeDiffInSeconds)) {
-      return daysAgoOutput(timeDiffInSeconds);
-    }
-    if (monthsAgo(timeDiffInSeconds)) {
-      return monthsAgoOutput(timeDiffInSeconds);
-    }
+    const {
+      MINUTE: MINUTE_IN_SECONDS,
+      HOUR: HOUR_IN_SECONDS,
+      DAY: DAY_IN_SECONDS,
+      MONTH: MONTH_IN_SECONDS,
+      YEAR: YEAR_IN_SECONDS,
+    } = this.TIME_IN_SECONDS;
 
-    return yearsAgo(timeDiffInSeconds)
-      ? yearsAgoOutput(timeDiffInSeconds)
-      : "Invalid time";
+    if (timeDiffInSeconds < MINUTE_IN_SECONDS) {
+      return getFormattedTime(timeDiffInSeconds, SECOND);
+    }
+    if (timeDiffInSeconds < HOUR_IN_SECONDS) {
+      return getFormattedTime(
+        Math.floor(timeDiffInSeconds / MINUTE_IN_SECONDS),
+        MINUTE
+      );
+    }
+    if (timeDiffInSeconds < DAY_IN_SECONDS) {
+      return getFormattedTime(
+        Math.floor(timeDiffInSeconds / HOUR_IN_SECONDS),
+        HOUR
+      );
+    }
+    if (timeDiffInSeconds < MONTH_IN_SECONDS) {
+      return getFormattedTime(
+        Math.floor(timeDiffInSeconds / DAY_IN_SECONDS),
+        DAY
+      );
+    }
+    if (timeDiffInSeconds < YEAR_IN_SECONDS) {
+      return getFormattedTime(
+        Math.floor(timeDiffInSeconds / MONTH_IN_SECONDS),
+        MONTH
+      );
+    }
+    return getFormattedTime(
+      Math.floor(timeDiffInSeconds / YEAR_IN_SECONDS),
+      YEAR
+    );
   }
 }
 

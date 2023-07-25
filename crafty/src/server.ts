@@ -46,7 +46,9 @@ program
         try {
           await postMessageUseCase.handle(postMessageCommand);
           console.log("[✅] Message posted");
-          console.table([messageRepository.message]);
+          console.table([
+            messageRepository.getMessageById(postMessageCommand.id),
+          ]);
           exit(0);
         } catch (error) {
           console.error("[❌]", error);
