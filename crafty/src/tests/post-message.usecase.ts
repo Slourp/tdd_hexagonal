@@ -1,11 +1,25 @@
 import DateProvider from "./IDateProvider";
 import IMessageRepository from "./IMessageRepository";
+import { MessageText } from "./Message";
 import postMessageCommand from "./postMessageCommand";
 
-export class MessageTooLongError extends Error {}
+export class MessageTooLongError extends Error {
+  constructor() {
+    super("The message text is too long.");
+  }
+}
 
-export class EmptyMessageError extends Error {}
-export class WhiteSpacesMessageError extends Error {}
+export class EmptyMessageError extends Error {
+  constructor() {
+    super("The message text cannot be empty.");
+  }
+}
+
+export class WhiteSpacesMessageError extends Error {
+  constructor() {
+    super("The message text cannot contain only white spaces.");
+  }
+}
 
 export class PostMessageUseCase {
   constructor(
@@ -13,16 +27,11 @@ export class PostMessageUseCase {
     private readonly dateProvider: DateProvider
   ) {}
   async handle(postMessageCommand: postMessageCommand) {
-    if (postMessageCommand.text.length >= 280) throw new MessageTooLongError();
-
-    if (postMessageCommand.text.length == 0) throw new EmptyMessageError();
-
-    if (postMessageCommand.text.trim().length == 0)
-      throw new WhiteSpacesMessageError();
+    const messageText = MessageText.of(postMessageCommand.text);
 
     await this.messageRepository.save({
       id: postMessageCommand.id,
-      text: postMessageCommand.text,
+      text: messageText,
       author: postMessageCommand.author,
       publishedAt: this.dateProvider.getNow(),
     });

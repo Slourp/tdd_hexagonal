@@ -1,4 +1,4 @@
-import Message from "./Message";
+import Message, { MessageText } from "./Message";
 
 export const messageBuilder = ({
   id = "message-id",
@@ -28,7 +28,7 @@ export const messageBuilder = ({
     build: (): Message => ({
       id: props.id,
       author: props.author,
-      text: props.text,
+      text: MessageText.of(props.text),
       publishedAt: props.publishedAt,
     }), // This is optional, it returns the final message object without any additional modifications.
   };

@@ -33,7 +33,7 @@ class ViewTimeLineViewCase {
     );
     const timeLine: Timeline[] = usersMessages.map((message: Message) => ({
       author: message.author,
-      text: message.text,
+      text: message.text.value,
       publicationTime: this.publicationTime(message.publishedAt),
     }));
 

@@ -1,3 +1,4 @@
+import Message from "./Message";
 import { messageBuilder } from "./message.builder";
 import { MessagingFixture, createMessagingFixture } from "./messaging-fixture";
 import {
@@ -19,9 +20,14 @@ describe("Feature: posting a message", () => {
         .withText("Hello world")
         .withPublishedAt(new Date("2023-01-19T19:00:00.000Z"));
 
-      await fixtures.whenUserPostsAmessage(aliceMessageBuilder.build());
+      const aliceBuildedMessage: Message = aliceMessageBuilder.build();
 
-      await fixtures.thenMessageShouldBe(aliceMessageBuilder.build());
+      await fixtures.whenUserPostsAmessage({
+        ...aliceBuildedMessage,
+        text: aliceBuildedMessage.text.value,
+      });
+
+      await fixtures.thenMessageShouldBe(aliceBuildedMessage);
     });
 
     test("Alice can not post a message with more than 280 characters", async () => {
