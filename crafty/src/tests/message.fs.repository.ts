@@ -9,14 +9,34 @@ export class FilsystemMessageRepository implements IMessageRepository {
 
   async save(msg: Message): Promise<void> {
     const allMessages = await this.getAllMessages();
-    allMessages.push(msg);
+    const updatedMessages = allMessages.map((message) =>
+      message.id === msg.id ? msg : message
+    );
 
-    return fs.promises.writeFile(this.messagePath, JSON.stringify(allMessages));
+    // If message doesn't exist in the list, push it
+    if (!updatedMessages.some((message) => message.id === msg.id)) {
+      updatedMessages.push(msg);
+    }
+
+    return fs.promises.writeFile(
+      this.messagePath,
+      JSON.stringify(updatedMessages)
+    );
   }
 
-  getMessageById(messageId: string): Message | undefined {
+  async edit(msg: Message): Promise<void> {
+    const allMessages = await this.getAllMessages();
+
+    // If message doesn't exist, throw error
+    if (!allMessages.some((message) => message.id === msg.id))
+      throw new Error(`Message with id: ${msg.id} does not exist.`);
+
+    return this.save(msg);
+  }
+
+  async getMessageById(messageId: string): Promise<Message | undefined> {
     const messages: Message[] = JSON.parse(
-      fs.readFileSync(this.messagePath, "utf-8")
+      await fs.promises.readFile(this.messagePath, "utf-8")
     );
 
     return messages.find((msg) => msg.id === messageId);
