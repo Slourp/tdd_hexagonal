@@ -8,6 +8,9 @@ import postMessageCommand from "./tests/postMessageCommand";
 import DateProvider from "./tests/IDateProvider";
 import ViewTimeLineViewCase from "./tests/view-timeline.usecase";
 import { exit } from "process";
+import EditMessageUseCase, {
+  editMessageCommand,
+} from "./tests/edit-message.usecase";
 
 const program = new Command();
 
@@ -29,6 +32,8 @@ const viewTimeLineViewCase = new ViewTimeLineViewCase(
   messageRepository,
   realDateProvider
 );
+
+const editMessageUseCase = new EditMessageUseCase(messageRepository);
 
 program
   .version("1.0.0")
@@ -69,8 +74,29 @@ program
           exit(1);
         }
       })
+  )
+  .addCommand(
+    new Command("edit")
+      .argument("<message-id>", "ID of the message slated for update")
+      .argument("<new-message>", "the new message text")
+      .action(async (messageId, message) => {
+        const editMessageCommand: editMessageCommand = {
+          id: messageId,
+          text: message,
+        };
+        try {
+          await editMessageUseCase.handle(editMessageCommand);
+          console.log("[✅] Message edited");
+          console.table([
+            messageRepository.getMessageById(editMessageCommand.id),
+          ]);
+          exit(0);
+        } catch (error) {
+          console.error("[❌]", error);
+          exit(1);
+        }
+      })
   );
-
 const main = async () => {
   await program.parseAsync();
 };

@@ -1,6 +1,7 @@
 import IMessageRepository from "./IMessageRepository";
 import Message from "./Message";
 import Timeline from "./Timeline";
+import EditMessageUseCase, { editMessageCommand } from "./edit-message.usecase";
 import { InMemoryMessageRepository } from "./message.inmemory.repository";
 import { PostMessageUseCase } from "./post-message.usecase";
 import postMessageCommand from "./postMessageCommand";
@@ -19,8 +20,11 @@ export const createMessagingFixture = () => {
     messageRepository,
     dateProvider
   );
-  let timeline: Timeline[];
+
+  const editMessageUseCase = new EditMessageUseCase(messageRepository);
+
   let thrownError: Error;
+  let timeline: Timeline[];
 
   return {
     // Fonctions pour les tests
@@ -43,16 +47,19 @@ export const createMessagingFixture = () => {
     async whenUserSeesUsersTimeLine(user: string) {
       await viewTimeLineViewCase.handle({ user });
     },
-    thenMessageShouldBe(expectedMessage: Message) {
-      expect(expectedMessage).toEqual(
-        messageRepository.getMessageById(expectedMessage.id)
-      );
+    async thenMessageShouldBe(expectedMessage: Message) {
+      const message = messageRepository.getMessageById(expectedMessage.id);
+      expect(expectedMessage).toEqual(message);
     },
     thenErrorShouldBe(expectErrorClass: new () => Error) {
       expect(thrownError).toBeInstanceOf(expectErrorClass);
     },
-    async whenUserEditMessage(message: { id: string; text: string }) {
-      // Implémentez cette fonction selon vos besoins
+    async whenUserEditMessage(editMessageCommand: editMessageCommand) {
+      try {
+        editMessageUseCase.handle(editMessageCommand);
+      } catch (error) {
+        thrownError = error;
+      }
     },
   };
 };

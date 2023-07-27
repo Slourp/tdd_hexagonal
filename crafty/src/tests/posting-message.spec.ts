@@ -16,15 +16,12 @@ describe("Feature: posting a message", () => {
       const aliceMessageBuilder = messageBuilder()
         .withId("message-id")
         .withAuthor("Alice")
-        .withText("Hello world");
+        .withText("Hello world")
+        .withPublishedAt(new Date("2023-01-19T19:00:00.000Z"));
 
-      await fixtures.whenUserPostsAmessage(messageBuilder().build());
+      await fixtures.whenUserPostsAmessage(aliceMessageBuilder.build());
 
-      fixtures.thenMessageShouldBe(
-        aliceMessageBuilder
-          .withPublishedAt(new Date("2023-01-19T19:00:00.000Z"))
-          .build()
-      );
+      await fixtures.thenMessageShouldBe(aliceMessageBuilder.build());
     });
 
     test("Alice can not post a message with more than 280 characters", async () => {
