@@ -8,24 +8,22 @@ import StubeDateProvider from "./stub-date-provider";
 import ViewTimeLineViewCase from "./view-timeline.usecase";
 
 export const createMessagingFixture = () => {
-  let timeline: Timeline[];
-
+  // Déclarations et initialisations
   const dateProvider = new StubeDateProvider();
-
   const messageRepository: IMessageRepository = new InMemoryMessageRepository();
-
   const postMessageUseCase = new PostMessageUseCase(
     messageRepository,
     dateProvider
   );
-
   const viewTimeLineViewCase = new ViewTimeLineViewCase(
     messageRepository,
     dateProvider
   );
-
+  let timeline: Timeline[];
   let thrownError: Error;
+
   return {
+    // Fonctions pour les tests
     givenNowIs(now: Date) {
       dateProvider.now = now;
     },
@@ -53,7 +51,9 @@ export const createMessagingFixture = () => {
     thenErrorShouldBe(expectErrorClass: new () => Error) {
       expect(thrownError).toBeInstanceOf(expectErrorClass);
     },
-    async whenUserEditMessage(message: { id: string; text: string }) {},
+    async whenUserEditMessage(message: { id: string; text: string }) {
+      // Implémentez cette fonction selon vos besoins
+    },
   };
 };
 
