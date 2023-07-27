@@ -1,6 +1,6 @@
 import * as path from "path";
 import * as fs from "fs";
-import Message from "./Message";
+import Message, { MessageText } from "./Message";
 import IMessageRepository from "./IMessageRepository";
 
 export class FilsystemMessageRepository implements IMessageRepository {
@@ -63,7 +63,7 @@ export class FilsystemMessageRepository implements IMessageRepository {
     // Whitelisting: Create Message objects with only the necessary properties (id, text, author, publishedAt)
     const messages: Message[] = messageObjects.map((messageObj) => ({
       id: messageObj.id,
-      text: messageObj.text,
+      text: MessageText.of(messageObj.text),
       // Assuming publishedAt is in a string format that can be parsed to a Date object
       publishedAt: new Date(messageObj.publishedAt),
       author: messageObj.author,
