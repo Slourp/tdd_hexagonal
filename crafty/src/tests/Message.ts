@@ -14,14 +14,14 @@ type Message = {
 export default Message;
 
 export class MessageText {
-  private constructor(readonly value: string) {}
+  private constructor(readonly value: string) { }
 
   public static of(value: string): MessageText {
     if (!value) throw new EmptyMessageError();
 
     if (value.trim() === "") throw new WhiteSpacesMessageError();
 
-    if (value.length > 500) throw new MessageTooLongError();
+    if (value.length > 280) throw new MessageTooLongError(); // Updated this line
 
     return new MessageText(value);
   }

@@ -1,8 +1,10 @@
 {
+  "license": "MIT",
   "scripts": {
     "build": "tsc --noEmit --downlevelIteration src/server.ts && esbuild src/server.ts --outdir=dist --bundle --platform=node --format=cjs",
     "start:dev": "ts-node-dev --respawn --transpile-only src/server.ts",
-    "post-message": "npm run build && node dist/server.js post"
+    "post-message": "npm run build && node dist/server.js post",
+    "test": "jest"
   },
   "dependencies": {
     "@types/node": "^20.2.5",

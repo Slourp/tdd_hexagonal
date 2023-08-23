@@ -1,6 +1,5 @@
 import IMessageRepository from "./IMessageRepository";
 import Message, { MessageText } from "./Message";
-import { EmptyMessageError, MessageTooLongError } from "./post-message.usecase";
 
 export type editMessageCommand = {
   id: string;
@@ -8,7 +7,7 @@ export type editMessageCommand = {
 };
 
 class EditMessageUseCase {
-  constructor(private messageRepository: IMessageRepository) {}
+  constructor(private messageRepository: IMessageRepository) { }
 
   async handle(editMessageCommand: editMessageCommand) {
     const messageText = MessageText.of(editMessageCommand.text);

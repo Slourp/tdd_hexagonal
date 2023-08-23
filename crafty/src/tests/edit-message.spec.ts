@@ -1,11 +1,12 @@
+import Message from "./Message";
 import { messageBuilder } from "./message.builder";
-import { MessagingFixture, createMessagingFixture } from "./messaging-fixture";
+import { MessagingFixture } from "./messaging-fixture";
 import { EmptyMessageError, MessageTooLongError } from "./post-message.usecase";
 
 describe("Feature: Editing a message", () => {
   let fixture: MessagingFixture;
 
-  beforeEach(() => (fixture = createMessagingFixture()));
+  beforeEach(() => fixture = new MessagingFixture());
 
   describe("Rule: The edited text should not be superior to 280 characters", () => {
     test("Alice can edit her message to a text inferior to 280 characters", async () => {
@@ -19,16 +20,17 @@ describe("Feature: Editing a message", () => {
 
       const editedMessage = aliceMessageBuilder.withText("Hello world").build();
 
-      fixture.whenUserEditMessage({
-        id: "message-id",
-        text: "Hello world",
+      await fixture.whenUserEditMessage({
+        id: editedMessage.id,
+        text: editedMessage.text.value,
       });
 
-      fixture.thenMessageShouldBe(editedMessage);
+      await fixture.thenMessageShouldBe(editedMessage);
     });
-    test("Alice can not edit het messageto a text superior to 280 characteres", async () => {
-      const textWithMoreThan280Characteres: string =
-        "In ex Lorem consequat veniam labore mollit quis aliqua quis eu minim. Commodo adipisicing dolore tempor culpa consectetur ea magna ad sit exercitation culpa adipisicing. Labore non enim laboris dolore commodo officia sint dolor enim. Consectetur eu in ullamco non excepteur enim te.";
+
+    test("Alice cannot edit her message to a text superior to 280 characters", async () => {
+      const textWithMoreThan280Characters =
+        "Nam quis nulla. Integer malesuada. In in enim a arcu imperdiet malesuada. Sed vel lectus. Donec odio urna, tempus molestie, porttitor ut, iaculis quis, sem. Phasellus rhoncus. Aenean id metus id velit ullamcorper pulvinar. Vestibulum fermentum tortor id mi. Pellentesque ipsum. Nulla non ar"; // trimmed for brevity
 
       const aliceMessageBuilder = messageBuilder({
         id: "message-id",
@@ -36,40 +38,42 @@ describe("Feature: Editing a message", () => {
         text: "Hello world",
       });
 
-      fixture.givenTheFollowingMessagesExist([aliceMessageBuilder.build()]);
+      const originalMessage = aliceMessageBuilder.build()
 
-      const editedMessage = aliceMessageBuilder
-        .withText(textWithMoreThan280Characteres)
-        .build();
+      fixture.givenTheFollowingMessagesExist([originalMessage]);
 
-      fixture.whenUserEditMessage({
-        id: "message-id",
-        text: textWithMoreThan280Characteres,
+      await fixture.whenUserEditMessage({
+        id: originalMessage.id,
+        text: textWithMoreThan280Characters,
       });
 
-      await fixture.thenMessageShouldBe(editedMessage);
+      // If the builder doesn't allow text >280 characters, the message should remain unchanged.
+      await fixture.thenMessageShouldBe(aliceMessageBuilder.build());
       fixture.thenErrorShouldBe(MessageTooLongError);
     });
 
-    test("Alice Can not edit her message to a empty text", async () => {
-      const updatedText: string = "             ";
 
-      const aliceMessageBuilder = messageBuilder({
-        id: "message-id",
-        author: "Alice",
-        text: "I'm the initial alice's text !",
-      });
+    test("Alice cannot edit her message to an empty text", async () => {
+      const updatedTextEmptyText: string = "";
 
-      fixture.givenTheFollowingMessagesExist([aliceMessageBuilder.build()]);
+      const aliceMessageBuilder = messageBuilder()
+        .withId("message-id")
+        .withAuthor("Alice")
+        .withText("I'm the initial Alice's text!");
 
-      const editedMessage = aliceMessageBuilder.withText(updatedText).build();
 
-      fixture.whenUserEditMessage({
-        id: "message-id",
-        text: updatedText,
-      });
+      const initialAlicesMessage: Message = aliceMessageBuilder.build()
 
-      await fixture.thenMessageShouldBe(editedMessage);
+      fixture.givenTheFollowingMessagesExist([initialAlicesMessage]);
+
+      const editedMessage = {
+        ...initialAlicesMessage,
+        text: updatedTextEmptyText
+      };
+
+      await fixture.whenUserEditMessage(editedMessage);
+
+      await fixture.thenMessageShouldBe(initialAlicesMessage);
       fixture.thenErrorShouldBe(EmptyMessageError);
     });
   });
