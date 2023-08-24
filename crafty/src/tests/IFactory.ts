@@ -1,8 +1,6 @@
 import { Validator } from "./Validator";
-import ValidatorType from "./validators/ValidatorType";
-
 interface IFactory {
-    create(validatorType: ValidatorType): Validator;
+    create(validatorType: any): Validator;
 }
 
 export default IFactory

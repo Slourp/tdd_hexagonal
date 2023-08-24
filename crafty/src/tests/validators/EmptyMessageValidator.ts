@@ -1,12 +1,12 @@
 // EmptyMessageValidator.ts
 
+import ErrorFactory from "../Error/ErrorFactory";
 import { Validator } from "../Validator";
-import { EmptyMessageError } from "../post-message.usecase";
-
+import ValidatorType from "./ValidatorType";
 
 export class EmptyMessageValidator extends Validator {
     validate(value: string): void {
-        if (!value) throw new EmptyMessageError();
+        if (!value) throw ErrorFactory.create(ValidatorType.EmptyMessage);
         if (this.nextValidator) this.nextValidator.validate(value);
     }
 }

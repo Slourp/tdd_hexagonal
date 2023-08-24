@@ -1,12 +1,9 @@
-// WhiteSpacesMessageValidator.ts
-
+import ErrorFactory from "../Error/ErrorFactory";
 import { Validator } from "../Validator";
-import { WhiteSpacesMessageError } from "../post-message.usecase";
-
-
+import ValidatorType from "./ValidatorType";
 export class WhiteSpacesMessageValidator extends Validator {
     validate(value: string): void {
-        if (value.trim() === "") throw new WhiteSpacesMessageError();
+        if (value.trim() === "") throw ErrorFactory.create(ValidatorType.WhiteSpacesMessage);
         if (this.nextValidator) this.nextValidator.validate(value);
     }
 }
