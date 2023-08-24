@@ -5,7 +5,8 @@ import IMessageRepository from "./IMessageRepository";
 
 export class FilsystemMessageRepository implements IMessageRepository {
   public message!: Message;
-  private readonly messagePath = path.join(__dirname, "message.json");
+  constructor(
+    private readonly messagePath = path.join(__dirname, "message.json")) { }
 
   async save(msg: Message): Promise<void> {
     const allMessages = await this.getAllMessages();
@@ -14,13 +15,19 @@ export class FilsystemMessageRepository implements IMessageRepository {
     );
 
     // If message doesn't exist in the list, push it
-    if (!updatedMessages.some((message) => message.id === msg.id)) {
-      updatedMessages.push(msg);
-    }
+    if (!updatedMessages.some((message) => message.id === msg.id)) updatedMessages.push(msg);
+
+    const serializedMessages = updatedMessages.map((message) => ({
+      id: message.id,
+      text: message.text.value,
+      author: message.author,
+      publishedAt: message.publishedAt.toISOString(),
+    }));
+
 
     return fs.promises.writeFile(
       this.messagePath,
-      JSON.stringify(updatedMessages)
+      JSON.stringify(serializedMessages)
     );
   }
 

@@ -29,7 +29,7 @@ export const messageBuilder = ({
       id: props.id,
       author: props.author,
       text: MessageText.of(props.text),
-      publishedAt: props.publishedAt,
+      publishedAt: new Date(props.publishedAt),
     }), // This is optional, it returns the final message object without any additional modifications.
   };
 };
