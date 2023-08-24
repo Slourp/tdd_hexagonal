@@ -1,8 +1,14 @@
+import { Validator } from "./Validator";
 import {
   EmptyMessageError,
   MessageTooLongError,
   WhiteSpacesMessageError,
 } from "./post-message.usecase";
+import { EmptyMessageValidator } from "./validators/EmptyMessageValidator";
+import { MessageTooLongValidator } from "./validators/MessageTooLongValidator";
+import ValidatorFactory from "./validators/ValidatorFactory";
+import ValidatorType from "./validators/ValidatorType";
+import { WhiteSpacesMessageValidator } from "./validators/WhiteSpacesMessageValidator";
 
 type Message = {
   id: string;
@@ -13,16 +19,25 @@ type Message = {
 
 export default Message;
 
+
+
+
 export class MessageText {
   private constructor(readonly value: string) { }
 
   public static of(value: string): MessageText {
-    if (!value) throw new EmptyMessageError();
+    const emptyMessageValidator = ValidatorFactory.create(ValidatorType.EmptyMessage);
+    const whiteSpacesMessageValidator = ValidatorFactory.create(ValidatorType.WhiteSpacesMessage);
+    const messageTooLongValidator = ValidatorFactory.create(ValidatorType.MessageTooLong);
 
-    if (value.trim() === "") throw new WhiteSpacesMessageError();
+    emptyMessageValidator
+      .setNext(whiteSpacesMessageValidator)
+      .setNext(messageTooLongValidator);
 
-    if (value.length > 280) throw new MessageTooLongError(); // Updated this line
+    emptyMessageValidator.validate(value);
 
     return new MessageText(value);
   }
 }
+
+
