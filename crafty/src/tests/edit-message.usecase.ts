@@ -1,5 +1,5 @@
 import IMessageRepository from "./IMessageRepository";
-import Message, { MessageText } from "./Message";
+import Message, { MessageText, SerializedMessageData } from "./Message";
 
 export type editMessageCommand = {
   id: string;
@@ -20,10 +20,12 @@ class EditMessageUseCase {
       console.log("Message not found with ID:", editMessageCommand.id);
       return;
     }
-    const editedMessagetoBeSaved: Message = {
-      ...message,
-      text: messageText,
-    };
+
+    const editedMessagetoBeSaved: Message = Message.fromData({
+      ...message.getData(),
+      text: editMessageCommand.text
+    });
+
     try {
       await this.messageRepository.save(editedMessagetoBeSaved);
     } catch (error) {

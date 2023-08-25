@@ -17,19 +17,11 @@ export const messageBuilder = ({
     text,
     publishedAt,
   };
-
   return {
     withId: (_id: string) => messageBuilder({ ...props, id: _id }),
-    withAuthor: (_author: string) =>
-      messageBuilder({ ...props, author: _author }),
+    withAuthor: (_author: string) => messageBuilder({ ...props, author: _author }),
     withText: (_text: string) => messageBuilder({ ...props, text: _text }),
-    withPublishedAt: (_publishedAt: Date) =>
-      messageBuilder({ ...props, publishedAt: _publishedAt }),
-    build: (): Message => ({
-      id: props.id,
-      author: props.author,
-      text: MessageText.of(props.text),
-      publishedAt: new Date(props.publishedAt),
-    }), // This is optional, it returns the final message object without any additional modifications.
+    withPublishedAt: (_publishedAt: Date) => messageBuilder({ ...props, publishedAt: _publishedAt }),
+    build: (): Message => new Message(props.id, MessageText.of(props.text), props.author, new Date(props.publishedAt)),
   };
 };

@@ -9,23 +9,18 @@ export class FilsystemMessageRepository implements IMessageRepository {
     private readonly messagePath = path.join(__dirname, "message.json")) { }
 
   private serializeMessages(messages: Message[]): string {
-    return JSON.stringify(messages.map((message) => ({
-      id: message.id,
-      text: message.text.value,
-      author: message.author,
-      publishedAt: message.publishedAt.toISOString(),
-    })));
+    return JSON.stringify(messages.map((message) => message.getData()));
   }
 
-  async save(msg: Message): Promise<void> {
+  async save(msgToSave: Message): Promise<void> {
     const allMessages = await this.getAllMessages();
     const updatedMessages = allMessages.map((message) =>
-      message.id === msg.id ? msg : message
+      message.id === msgToSave.id ? msgToSave : message
     );
 
     // If message doesn't exist in the list, push it
-    if (!updatedMessages.some((message) => message.id === msg.id)) {
-      updatedMessages.push(msg);
+    if (!updatedMessages.some((message) => message.id === msgToSave.id)) {
+      updatedMessages.push(msgToSave);
     }
 
     const serializedMessages = this.serializeMessages(updatedMessages);
@@ -70,13 +65,7 @@ export class FilsystemMessageRepository implements IMessageRepository {
     }[];
 
     // Whitelisting: Create Message objects with only the necessary properties (id, text, author, publishedAt)
-    const messages: Message[] = messageObjects.map((messageObj) => ({
-      id: messageObj.id,
-      text: MessageText.of(messageObj.text),
-      // Assuming publishedAt is in a string format that can be parsed to a Date object
-      publishedAt: new Date(messageObj.publishedAt),
-      author: messageObj.author,
-    }));
+    const messages: Message[] = messageObjects.map((messageObj) => (Message.fromData(messageObj)));
 
     return messages;
   }

@@ -5,6 +5,7 @@ import {
   MessageTooLongError,
   WhiteSpacesMessageError,
 } from "./post-message.usecase";
+import postMessageCommand from "./postMessageCommand";
 
 describe("Feature: posting a message", () => {
   let fixtures: MessagingFixture;
@@ -24,10 +25,14 @@ describe("Feature: posting a message", () => {
 
       const aliceBuildedMessage: Message = aliceMessageBuilder.build();
 
-      await fixtures.whenUserPostsAmessage({
-        ...aliceBuildedMessage,
-        text: aliceBuildedMessage.text.value,
-      });
+      const postMessageCommand: postMessageCommand = {
+        id: aliceBuildedMessage.id,
+        text: aliceBuildedMessage.text,
+        author: aliceBuildedMessage.author,
+      }
+
+      await fixtures.whenUserPostsAmessage(postMessageCommand
+      );
 
       await fixtures.thenMessageShouldBe(aliceBuildedMessage);
     });
@@ -38,11 +43,13 @@ describe("Feature: posting a message", () => {
 
       fixtures.givenNowIs(new Date("2023-01-19T19:00:00.000Z"));
 
-      await fixtures.whenUserPostsAmessage({
+      const postMessageCommand: postMessageCommand = {
         id: "message-id",
         author: "Alice",
         text: textWithMoreThan280Characters,
-      });
+      }
+
+      await fixtures.whenUserPostsAmessage(postMessageCommand);
 
       fixtures.thenErrorShouldBe(MessageTooLongError);
     });

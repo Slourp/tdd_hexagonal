@@ -1,4 +1,5 @@
 import Message from "./Message";
+import { editMessageCommand } from "./edit-message.usecase";
 import { messageBuilder } from "./message.builder";
 import { MessagingFixture } from "./messaging-fixture";
 import { EmptyMessageError, MessageTooLongError } from "./post-message.usecase";
@@ -20,10 +21,12 @@ describe("Feature: Editing a message", () => {
 
       const editedMessage = aliceMessageBuilder.withText("Hello world").build();
 
-      await fixture.whenUserEditMessage({
+      const editMessageCommand: editMessageCommand = {
         id: editedMessage.id,
-        text: editedMessage.text.value,
-      });
+        text: editedMessage.text,
+      }
+
+      await fixture.whenUserEditMessage(editMessageCommand);
 
       await fixture.thenMessageShouldBe(editedMessage);
     });
@@ -66,8 +69,8 @@ describe("Feature: Editing a message", () => {
 
       fixture.givenTheFollowingMessagesExist([initialAlicesMessage]);
 
-      const editedMessage = {
-        ...initialAlicesMessage,
+      const editedMessage: editMessageCommand = {
+        id: initialAlicesMessage.id,
         text: updatedTextEmptyText
       };
 

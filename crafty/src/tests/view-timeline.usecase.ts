@@ -24,7 +24,7 @@ class ViewTimeLineViewCase {
   constructor(
     private readonly messageRepository: IMessageRepository,
     private readonly dateProvider: DateProvider
-  ) {}
+  ) { }
 
   async handle({ user }: { user: string }): Promise<Timeline[]> {
     const usersMessages = await this.messageRepository.getUsersMessages(user);
@@ -33,7 +33,7 @@ class ViewTimeLineViewCase {
     );
     const timeLine: Timeline[] = usersMessages.map((message: Message) => ({
       author: message.author,
-      text: message.text.value,
+      text: message.text,
       publicationTime: this.publicationTime(message.publishedAt),
     }));
 
