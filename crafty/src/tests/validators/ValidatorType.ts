@@ -1,7 +1,8 @@
 enum ValidatorType {
-    EmptyMessage,
-    WhiteSpacesMessage,
-    MessageTooLong,
+    EmptyMessage = "EmptyMessage",
+    WhiteSpacesMessage = "WhiteSpacesMessage",
+    MessageTooLong = "MessageTooLong"
 }
 
-export default ValidatorType
+
+export { ValidatorType }

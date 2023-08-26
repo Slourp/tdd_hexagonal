@@ -1,15 +1,16 @@
-import { WhiteSpacesMessageError, MessageTooLongError, EmptyMessageError } from "../post-message.usecase";
-import ValidatorType from "../validators/ValidatorType";
+import { EmptyMessageError, MessageTooLongError, WhiteSpacesMessageError } from "../../application/usecases/post-message.usecase";
+import { ValidatorType } from "../validators/ValidatorType";
 
 class ErrorFactory {
-    private static errorMap: Record<ValidatorType, new () => Error> = {
-        [ValidatorType.EmptyMessage]: EmptyMessageError,
-        [ValidatorType.WhiteSpacesMessage]: WhiteSpacesMessageError,
-        [ValidatorType.MessageTooLong]: MessageTooLongError,
-    };
-
     static create(errorType: ValidatorType): Error {
-        const ErrorClass = ErrorFactory.errorMap[errorType];
+        const errorMap = {
+            [ValidatorType.EmptyMessage]: EmptyMessageError,
+            [ValidatorType.WhiteSpacesMessage]: WhiteSpacesMessageError,
+            [ValidatorType.MessageTooLong]: MessageTooLongError,
+        };
+
+        const ErrorClass = errorMap[errorType];
+
         if (ErrorClass) return new ErrorClass();
 
         throw new Error(`Invalid error type: ${errorType}`);

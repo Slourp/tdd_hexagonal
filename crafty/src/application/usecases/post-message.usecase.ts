@@ -1,7 +1,7 @@
-import DateProvider from "./IDateProvider";
-import IMessageRepository from "./IMessageRepository";
-import Message, { MessageText } from "./Message";
-import postMessageCommand from "./postMessageCommand";
+import DateProvider from "../../tests/IDateProvider";
+import IMessageRepository from "../../tests/IMessageRepository";
+import Message from "../../tests/Message";
+import postMessageCommand from "../../tests/postMessageCommand";
 
 export class MessageTooLongError extends Error {
   constructor() {
@@ -28,6 +28,7 @@ export class PostMessageUseCase {
   ) { }
   async handle(postMessageCommand: postMessageCommand) {
     const message: Message = Message.fromData({
+
       ...postMessageCommand,
       publishedAt: this.dateProvider.getNow().toISOString(),
     })

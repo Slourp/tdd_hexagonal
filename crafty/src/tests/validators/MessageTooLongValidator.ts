@@ -1,7 +1,6 @@
 import ErrorFactory from "../Error/ErrorFactory";
 import { Validator } from "../Validator";
-import { MessageTooLongError } from "../post-message.usecase";
-import ValidatorType from "./ValidatorType";
+import { ValidatorType } from "./ValidatorType";
 
 export class MessageTooLongValidator extends Validator {
     validate(value: string): void {

@@ -1,13 +1,12 @@
+import EditMessageUseCase, { editMessageCommand } from "../application/usecases/edit-message.usecase";
+import { PostMessageUseCase } from "../application/usecases/post-message.usecase";
+import ViewTimeLineViewCase from "../application/usecases/view-timeline.usecase";
 import IMessageRepository from "./IMessageRepository";
 import Message from "./Message";
 import Timeline from "./Timeline";
-import EditMessageUseCase, { editMessageCommand } from "./edit-message.usecase";
 import { InMemoryMessageRepository } from "./message.inmemory.repository";
-import { PostMessageUseCase } from "./post-message.usecase";
 import postMessageCommand from "./postMessageCommand";
 import StubeDateProvider from "./stub-date-provider";
-import ViewTimeLineViewCase from "./view-timeline.usecase";
-
 
 class MessagingFixture {
   private dateProvider: StubeDateProvider;
@@ -70,6 +69,7 @@ class MessagingFixture {
 
   async whenUserEditMessage(editMessageCommand: editMessageCommand) {
     try {
+
       await this.editMessageUseCase.handle(editMessageCommand);
     } catch (error) {
       this.thrownError = error;

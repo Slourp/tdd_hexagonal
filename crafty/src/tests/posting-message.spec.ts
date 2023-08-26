@@ -1,10 +1,7 @@
+import { MessageTooLongError, WhiteSpacesMessageError } from "../application/usecases/post-message.usecase";
 import Message from "./Message";
 import { messageBuilder } from "./message.builder";
 import { MessagingFixture } from "./messaging-fixture";
-import {
-  MessageTooLongError,
-  WhiteSpacesMessageError,
-} from "./post-message.usecase";
 import postMessageCommand from "./postMessageCommand";
 
 describe("Feature: posting a message", () => {

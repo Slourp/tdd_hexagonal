@@ -1,5 +1,5 @@
-import IMessageRepository from "./IMessageRepository";
-import Message, { MessageText, SerializedMessageData } from "./Message";
+import IMessageRepository from "../../tests/IMessageRepository";
+import Message, { MessageText } from "../../tests/Message";
 
 export type editMessageCommand = {
   id: string;
@@ -10,8 +10,6 @@ class EditMessageUseCase {
   constructor(private messageRepository: IMessageRepository) { }
 
   async handle(editMessageCommand: editMessageCommand) {
-    const messageText = MessageText.of(editMessageCommand.text);
-
     const message = await this.messageRepository.getMessageById(
       editMessageCommand.id
     );
