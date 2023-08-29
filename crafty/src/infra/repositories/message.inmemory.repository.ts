@@ -1,5 +1,5 @@
-import IMessageRepository from "./IMessageRepository";
-import Message from "./Message";
+import IMessageRepository from "../../application/repositories/IMessageRepository";
+import Message from "../../domain/Message";
 
 export class InMemoryMessageRepository implements IMessageRepository {
   private messages: Map<string, Message> = new Map();

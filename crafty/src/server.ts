@@ -1,24 +1,18 @@
 #!/usr/bin/env node
-import { v4 as uuidv4 } from "uuid";
-
 import { Command } from "commander";
-import { PostMessageUseCase } from "./tests/post-message.usecase";
-import { FilsystemMessageRepository } from "./tests/message.fs.repository";
+import { v4 as uuidv4 } from "uuid";
+import { FilsystemMessageRepository } from "./infra/repositories/message.fs.repository";
+import { PostMessageUseCase } from "./application/usecases/post-message.usecase";
+import ViewTimeLineViewCase from "./application/usecases/view-timeline.usecase";
+import EditMessageUseCase, { editMessageCommand } from "./application/usecases/edit-message.usecase";
 import postMessageCommand from "./tests/postMessageCommand";
-import DateProvider from "./tests/IDateProvider";
-import ViewTimeLineViewCase from "./tests/view-timeline.usecase";
+import RealDateProvider from "./real-date-provider";
 import { exit } from "process";
-import EditMessageUseCase, {
-  editMessageCommand,
-} from "./tests/edit-message.usecase";
+
 
 const program = new Command();
 
-class RealDateProvider implements DateProvider {
-  getNow(): Date {
-    return new Date();
-  }
-}
+
 const messageRepository = new FilsystemMessageRepository();
 // const messageRepository = new InMemoryMessageRepository();
 

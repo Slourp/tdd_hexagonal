@@ -1,5 +1,5 @@
-import { MessagingFixture } from "./messaging-fixture";
-import { messageBuilder } from "./message.builder";
+import { messageBuilder } from "../message.builder";
+import { MessagingFixture } from "../messaging-fixture";
 
 describe("Feature: Viewing a personal timeline", () => {
   let fixture: MessagingFixture;

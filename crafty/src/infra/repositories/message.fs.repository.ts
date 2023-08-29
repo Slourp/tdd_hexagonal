@@ -1,7 +1,7 @@
 import * as path from "path";
 import * as fs from "fs";
-import Message, { MessageText } from "./Message";
-import IMessageRepository from "./IMessageRepository";
+import Message from "../../domain/Message";
+import IMessageRepository from "../../application/repositories/IMessageRepository";
 
 export class FilsystemMessageRepository implements IMessageRepository {
   public message!: Message;

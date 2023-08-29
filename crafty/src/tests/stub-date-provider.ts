@@ -1,4 +1,4 @@
-import DateProvider from "./IDateProvider";
+import DateProvider from "../application/IDateProvider";
 
 class StubeDateProvider implements DateProvider {
   now!: Date;

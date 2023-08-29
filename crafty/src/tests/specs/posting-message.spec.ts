@@ -1,8 +1,8 @@
-import { MessageTooLongError, WhiteSpacesMessageError } from "../application/usecases/post-message.usecase";
-import Message from "./Message";
-import { messageBuilder } from "./message.builder";
-import { MessagingFixture } from "./messaging-fixture";
-import postMessageCommand from "./postMessageCommand";
+import { MessageTooLongError, WhiteSpacesMessageError } from "../../application/usecases/post-message.usecase";
+import Message from "../../domain/Message";
+import { messageBuilder } from "../message.builder";
+import { MessagingFixture } from "../messaging-fixture";
+import postMessageCommand from "../postMessageCommand";
 
 describe("Feature: posting a message", () => {
   let fixtures: MessagingFixture;

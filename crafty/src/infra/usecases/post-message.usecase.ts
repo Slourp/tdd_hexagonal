@@ -1,7 +1,7 @@
-import DateProvider from "../IDateProvider";
+import DateProvider from "../../application/IDateProvider";
+import IMessageRepository from "../../application/repositories/IMessageRepository";
 import Message from "../../domain/Message";
 import postMessageCommand from "../../tests/postMessageCommand";
-import IMessageRepository from "../repositories/IMessageRepository";
 
 export class MessageTooLongError extends Error {
   constructor() {

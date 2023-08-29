@@ -1,6 +1,6 @@
 
-import ValidatorFactory from "./validators/ValidatorFactory";
-import { ValidatorType } from "./validators/ValidatorType";
+import ValidatorFactory from "../tests/validators/ValidatorFactory";
+import { ValidatorType } from "../tests/validators/ValidatorType";
 export type SerializedMessageData = {
   id: string;
   text: string;

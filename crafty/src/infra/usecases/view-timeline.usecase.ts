@@ -1,7 +1,7 @@
-import DateProvider from "../IDateProvider";
+import DateProvider from "../../application/IDateProvider";
+import IMessageRepository from "../../application/repositories/IMessageRepository";
 import Message from "../../domain/Message";
 import Timeline from "../../tests/Timeline";
-import IMessageRepository from "../repositories/IMessageRepository";
 
 class ViewTimeLineViewCase {
   private readonly TIME_UNITS = {

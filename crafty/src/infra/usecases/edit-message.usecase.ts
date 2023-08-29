@@ -1,5 +1,5 @@
+import IMessageRepository from "../../application/repositories/IMessageRepository";
 import Message from "../../domain/Message";
-import IMessageRepository from "../repositories/IMessageRepository";
 
 export type editMessageCommand = {
   id: string;

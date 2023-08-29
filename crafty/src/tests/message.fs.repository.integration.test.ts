@@ -1,8 +1,8 @@
-import { FilsystemMessageRepository } from "./message.fs.repository";
+import { FilsystemMessageRepository } from "../infra/repositories/message.fs.repository";
 import path from "path";
 import fs from "fs/promises";
 import { messageBuilder } from "./message.builder";
-import Message from "./Message";
+import Message from "../domain/Message";
 
 const testMessagePath: string = path.join(__dirname, "./message-test.json");
 

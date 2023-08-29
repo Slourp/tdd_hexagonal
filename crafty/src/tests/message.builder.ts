@@ -1,4 +1,4 @@
-import Message, { MessageText } from "./Message";
+import Message, { MessageText } from "../domain/Message";
 
 export const messageBuilder = ({
   id = "message-id",
